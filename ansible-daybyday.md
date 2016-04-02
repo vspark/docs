@@ -2,7 +2,7 @@
 
 ## 一. ansible 安装
 
-### 源代码安装
+##### 源代码安装
 
 
     $ git clone git://github.com/ansible/ansible.git --recursive
