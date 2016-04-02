@@ -118,7 +118,7 @@
     "changed": false, 
     "ping": "pong"
     }
-    
+
 ###### 两条返回成了, 再往服务器发送指令试试
 
     $ ansible docker-server -a "rm /root/helloworld.txt" -u root
@@ -135,7 +135,7 @@
 
 
     docker2 | SUCCESS | rc=0 >>
-    
+     
 ###### 现在进入到两个docker 容器中, 分别ls, 发现 helloworld.txt 在两台主机上都已经创建了
 
     $ ls
