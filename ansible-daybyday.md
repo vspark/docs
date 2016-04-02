@@ -32,8 +32,13 @@
 
 ##### 1. 先弄两个被控端环境, 我使用docker容器, 在我mac本机拉起两个容器, 开放两个端口, 模拟两台主机, 具体关于docker容器不在这里讲述
 
-    $ docker run -d --name bserver -p 10022:22 sshd:dockerfile /run.sh -D
+    $ docker run -d --name aserver -p 10022:22 sshd:dockerfile /run.sh -D
     $ docker run -d --name bserver -p 10023:22 sshd:dockerfile /run.sh -D
+    
+    $ docker ps
+    CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS                   NAMES
+    e40f75c432ce        sshd:dockerfile     "/run.sh -D"        3 hours ago         Up 3 hours          0.0.0.0:10023->22/tcp   bserver
+    a03aa95eb9d2        sshd:dockerfile     "/run.sh -D"        3 hours ago         Up 3 hours          0.0.0.0:10022->22/tcp   aserver
     
 ##### 测试下免密登陆之前是否配好了, 192.168.99.100 是我docker容器虚拟机宿主机的IP
 
@@ -91,8 +96,8 @@
     192.168.99.104
 
     [docker-servers]
-    docker1 ansible_ssh_port=10022 ansible_ssh_host=192.168.99.100
-    docker2 ansible_ssh_port=10023 ansible_ssh_host=192.168.99.100
+    aserver ansible_ssh_port=10022 ansible_ssh_host=192.168.99.100
+    bserver ansible_ssh_port=10023 ansible_ssh_host=192.168.99.100
     #192.168.99.100:10023
     #192.168.99.100:10023
     
