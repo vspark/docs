@@ -119,7 +119,7 @@
     "ping": "pong"
     }
 
-###### 两条返回成了, 再往服务器发送指令试试
+##### 两条返回成了, 再往服务器发送指令试试
 
     $ ansible docker-server -a "rm /root/helloworld.txt" -u root
     
@@ -136,7 +136,7 @@
 
     docker2 | SUCCESS | rc=0 >>
      
-###### 现在进入到两个docker 容器中, 分别ls, 发现 helloworld.txt 在两台主机上都已经创建了
+##### 现在进入到两个docker 容器中, 分别ls, 发现 helloworld.txt 在两台主机上都已经创建了
 
     $ ls
     helloworld.txt
@@ -144,28 +144,28 @@
     $ ls
     helloworld.txt
     
-###### 4. 重新编排/etc/ansible/hosts
+##### 4. 重新编排/etc/ansible/hosts
 
   看前面我的hosts文件里面有三台主机, 分了两个主机组, 但是连个组的主机的默认用户不一样, 如果要向所有主机一次性发送命令, 怎么办呢
   下面看看这些主要变量:
   详细请看:http://docs.ansible.com/ansible/intro_inventory.html
 
-###### ansible_connection
+##### ansible_connection
     主机连接类型. 适用于所有 ansible 连接插件. 常用: local, smart, ssh or paramiko. 默认是: smart.
-###### SSH connection:
+##### SSH connection:
 
-###### ansible_host 
+##### ansible_host 
     ansible主机名
-###### ansible_port
+##### ansible_port
     SSH端口号, if not 22
-###### ansible_user
+##### ansible_user
     默认SSH用户
 ###### ansible_ssh_pass
     SSH密码 (不安全, 不推荐)
 
-###### 先贴这些目前要用到的, 其余的请看官方文档, 在随后用到的时候, 会再进行讲解
+##### 先贴这些目前要用到的, 其余的请看官方文档, 在随后用到的时候, 会再进行讲解
  
-###### 重新编排的/etc/ansible/hosts 如下
+##### 重新编排的/etc/ansible/hosts 如下
 
     $ cat /etc/ansible/hosts
     
@@ -176,7 +176,7 @@
     aserver         ansible_port=10022      ansible_host=192.168.99.100     ansible_user=root
     bserver         ansible_port=10023      ansible_host=192.168.99.100     ansible_user=root
     
-###### 测试下文件是否正确, pong pong pong 全通, 不用再在命令行指定 -u 参数了
+##### 测试下文件是否正确, pong pong pong 全通, 不用再在命令行指定 -u 参数了
 
     $ ansible all -m ping
     bserver | SUCCESS => {
@@ -192,7 +192,7 @@
         "ping": "pong"
     }
 
-###### 测试, 不断的测试, all ok
+##### 测试, 不断的测试, all ok
 
     $ ansible all -a "touch helloworld.txt"
     my-ubuntu | SUCCESS | rc=0 >>
@@ -216,5 +216,5 @@
     
     
     
-###### 5. 用实际的小例子进行个测试好了
+##### 5. 用实际的小例子进行个测试好了
 
