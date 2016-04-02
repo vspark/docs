@@ -213,4 +213,8 @@
 
     bserver | SUCCESS | rc=0 >>
     helloworld.txt
+    
+    
+    
+###### 5. 用实际的小例子进行个测试好了
 
