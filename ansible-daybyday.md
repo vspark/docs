@@ -24,6 +24,11 @@
 
     $ cd ansible
     $ sudo python setup.py install 
+    
+    $ ansible --version
+    ansible 2.1.0
+    config file = 
+    configured module search path = Default w/o overrides
 
 ##### Thats so easy, 安装就是这么简单
 
@@ -88,16 +93,16 @@
     $ ls
     
 ##### 这是为什么呢, 经过研究, 发现如果hosts里面列表按前面的编排, ansible好像是认为操作的时同一台机器
-##### 翻看ansible的相关文档, 发现还可以这样定义主机(/etc/ansible/hosts)
+##### 3. 仔细翻看ansible的相关文档, 发现还可以这样定义主机(/etc/ansible/hosts)
     
     $ cat /etc/ansible/hosts
     
     [my-ubuntu]
-    192.168.99.104
+    my-ubuntu   ansible_ssh_port=22     ansible_ssh_host=192.168.99.104
 
     [docker-servers]
-    aserver ansible_ssh_port=10022 ansible_ssh_host=192.168.99.100
-    bserver ansible_ssh_port=10023 ansible_ssh_host=192.168.99.100
+    aserver     ansible_ssh_port=10022  ansible_ssh_host=192.168.99.100
+    bserver     ansible_ssh_port=10023  ansible_ssh_host=192.168.99.100
     #192.168.99.100:10023
     #192.168.99.100:10023
     
@@ -139,3 +144,73 @@
     $ ls
     helloworld.txt
     
+###### 4. 重新编排/etc/ansible/hosts
+
+  看前面我的hosts文件里面有三台主机, 分了两个主机组, 但是连个组的主机的默认用户不一样, 如果要向所有主机一次性发送命令, 怎么办呢
+  下面看看这些主要变量:
+  详细请看:http://docs.ansible.com/ansible/intro_inventory.html
+
+###### ansible_connection
+    主机连接类型. 适用于所有 ansible 连接插件. 常用: local, smart, ssh or paramiko. 默认是: smart.
+###### SSH connection:
+
+###### ansible_host 
+    ansible主机名
+###### ansible_port
+    SSH端口号, if not 22
+###### ansible_user
+    默认SSH用户
+###### ansible_ssh_pass
+    SSH密码 (不安全, 不推荐)
+
+###### 先贴这些目前要用到的, 其余的请看官方文档, 在随后用到的时候, 会再进行讲解
+ 
+###### 重新编排的/etc/ansible/hosts 如下
+
+    $ cat /etc/ansible/hosts
+    
+    [my-ubuntu]
+    my-ubuntu       ansible_port=22         ansible_host=192.168.99.104     ansible_user=appuser
+
+    [docker-servers]
+    aserver         ansible_port=10022      ansible_host=192.168.99.100     ansible_user=root
+    bserver         ansible_port=10023      ansible_host=192.168.99.100     ansible_user=root
+    
+###### 测试下文件是否正确, pong pong pong 全通, 不用再在命令行指定 -u 参数了
+
+    $ ansible all -m ping
+    bserver | SUCCESS => {
+        "changed": false, 
+        "ping": "pong"
+    }
+    aserver | SUCCESS => {
+        "changed": false, 
+        "ping": "pong"
+    }
+    my-ubuntu | SUCCESS => {
+        "changed": false, 
+        "ping": "pong"
+    }
+
+###### 测试, 不断的测试, all ok
+
+    $ ansible all -a "touch helloworld.txt"
+    my-ubuntu | SUCCESS | rc=0 >>
+
+
+    bserver | SUCCESS | rc=0 >>
+
+
+    aserver | SUCCESS | rc=0 >>
+
+
+    $ ansible all -a "ls"
+    my-ubuntu | SUCCESS | rc=0 >>
+    helloworld.txt
+
+    aserver | SUCCESS | rc=0 >>
+    helloworld.txt
+
+    bserver | SUCCESS | rc=0 >>
+    helloworld.txt
+
