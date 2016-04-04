@@ -417,9 +417,15 @@
   监听正常, 那么看看tomcat运行是否正常, 因为是在容器内, 并且未配置暴露端口, 所以不能从外部访问8080端口, 只能从内部curl测试下
   实际应用的时候, 可以把端口暴露出来
   
-    $ curl localhost:8080
+    $ curl -i localhost:8080
+    HTTP/1.1 200 OK
+    Server: Apache-Coyote/1.1
+    Content-Type: text/html;charset=ISO-8859-1
+    Transfer-Encoding: chunked
+    Date: Mon, 04 Apr 2016 12:05:56 GMT
+    ........
     
-  返回一大堆html代码, 看起来tomcat是运行正常了
+  返回200和一大堆html代码, 看起来tomcat是运行正常了
   
 4.4 至此使用ansible 参数化安装jdk + tomcat 就完成了, 这只是一个测试, 应用于生产的话, 在参数上还要进行充分的细化
 
